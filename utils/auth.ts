@@ -3,7 +3,7 @@ import Github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
-import { db } from '@/db';
+import { db } from '@/utils/db';
 
 export const {
   handlers: { GET, POST },

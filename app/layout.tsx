@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { SessionProvider } from 'next-auth/react';
+import { auth } from '@/utils/auth';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -9,16 +11,19 @@ export const metadata: Metadata = {
   description: 'An app to track bugs in your projects',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
   return (
-    <html lang="en">
-      <body className={`${inter.className} min-h-screen bg-white`}>
-        {children}
-      </body>
-    </html>
+    <SessionProvider session={session}>
+      <html lang="en">
+        <body className={`${inter.className} min-h-screen bg-white`}>
+          {children}
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
