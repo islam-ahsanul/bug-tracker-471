@@ -10,9 +10,12 @@ export const POST = async (request: Request) => {
     });
 
     if (existingUser) {
-      return new NextResponse('User already exists', {
-        status: 400,
-      });
+      return new NextResponse(
+        JSON.stringify({ message: 'User already exists! Please try again' }),
+        {
+          status: 400,
+        }
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -26,12 +29,17 @@ export const POST = async (request: Request) => {
     });
 
     return new NextResponse(
-      JSON.stringify({ message: 'User is created', user: user }),
-      { status: 201 }
+      JSON.stringify({ message: 'Account created! Please login' }),
+      {
+        status: 201,
+      }
     );
   } catch (error: any) {
-    return new NextResponse('Error in creating user' + error, {
-      status: 500,
-    });
+    return new NextResponse(
+      JSON.stringify({ message: 'Something went wrong', errorLog: error }),
+      {
+        status: 500,
+      }
+    );
   }
 };

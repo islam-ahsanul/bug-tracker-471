@@ -15,8 +15,9 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useToast } from '@/components/ui/use-toast';
 
 const formSchema = z
   .object({
@@ -35,6 +36,8 @@ const formSchema = z
   });
 
 export default function SignUpForm() {
+  const router = useRouter();
+  const { toast } = useToast();
   const [error, setError] = useState('');
 
   const form = useForm({
@@ -65,11 +68,20 @@ export default function SignUpForm() {
       });
 
       if (res.ok) {
-        redirect('/login');
+        const data = await res.json();
+        console.log(data.message);
+        router.push('/login');
+        toast({
+          title: `${data.message}`,
+        });
       } else {
         const errorData = await res.json();
-        console.log(errorData.message);
+        console.log(errorData);
         setError(errorData.message);
+        toast({
+          title: `${errorData.message}`,
+          variant: `destructive`,
+        });
       }
     } catch (error: any) {
       setError('An unexpected error occurred');

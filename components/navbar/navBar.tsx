@@ -11,7 +11,7 @@ const NavBar = async () => {
   return (
     <header className="w-full bg-background shadow-sm">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        <Link href="#" className="flex items-center gap-2" prefetch={false}>
+        <Link href="/" className="flex items-center gap-2" prefetch={false}>
           <span className="font-bold">BUG TRACKER</span>
         </Link>
         {session?.user ? (
