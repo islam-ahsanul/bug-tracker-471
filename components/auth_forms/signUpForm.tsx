@@ -35,10 +35,10 @@ const formSchema = z
     path: ['confirmPassword'],
   });
 
-export default function SignUpForm() {
+const SignUpForm = () => {
   const router = useRouter();
   const { toast } = useToast();
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -52,7 +52,7 @@ export default function SignUpForm() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // console.log(values);
-    setError('');
+    setIsLoading(true);
 
     try {
       const res = await fetch('/api/signup', {
@@ -77,14 +77,15 @@ export default function SignUpForm() {
       } else {
         const errorData = await res.json();
         console.log(errorData);
-        setError(errorData.message);
         toast({
           title: `${errorData.message}`,
           variant: `destructive`,
         });
       }
     } catch (error: any) {
-      setError('An unexpected error occurred');
+      console.log('An unexpected error occurred');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -155,8 +156,12 @@ export default function SignUpForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? 'Submitting...' : 'Sign Up'}
+        </Button>
       </form>
     </Form>
   );
-}
+};
+
+export default SignUpForm;

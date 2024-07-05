@@ -46,8 +46,11 @@ export const loginWithCredentials = async (formData: FormData) => {
       switch (error.type) {
         case 'CredentialsSignin':
           return { error: 'Invalid credentials!' };
+
         default:
-          return { error: 'Something went wrong' };
+          // console.log(error.type);
+          // console.log(error.message);
+          return { error: 'Invalid credentials!' };
       }
     }
     throw error;

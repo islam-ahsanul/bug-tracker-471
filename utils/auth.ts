@@ -22,8 +22,8 @@ export const {
     Credentials({
       name: 'Credentials',
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        email: {},
+        password: {},
       },
       authorize: async (credentials) => {
         if (!credentials || !credentials?.email || !credentials?.password) {
@@ -44,6 +44,8 @@ export const {
           if (!isMatch) {
             throw new Error('Incorrect password');
           }
+        } else {
+          throw new Error('User not found');
         }
         return user;
       },
