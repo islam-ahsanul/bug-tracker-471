@@ -8,11 +8,11 @@ const GoogleLoginButton = () => {
   return (
     <div>
       <Button
-        className="flex flex-row items-center justify-center gap-2"
+        className="flex flex-row items-center justify-center gap-2 w-full"
         onClick={() => oAuthLogin('google')}
       >
         <FaGoogle />
-        <span>Sign in with Google</span>
+        <span>Continue with Google</span>
       </Button>
     </div>
   );
