@@ -8,6 +8,7 @@ import LogoutButton from '../auth_forms/logoutButton';
 
 const NavBar = async () => {
   const session = await auth();
+  // console.log(session);
   return (
     <header className="w-full bg-background shadow-sm">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
@@ -15,9 +16,17 @@ const NavBar = async () => {
           <span className="font-bold">BUG TRACKER</span>
         </Link>
         {session?.user ? (
-          <div className="hidden gap-2 md:flex">
-            <div>{session?.user?.name}</div>
-            <div>{session?.user?.email}</div>
+          <div className="hidden gap-2 md:flex items-center justify-center">
+            <div className="mr-4">Welcome, {session?.user?.name}</div>
+            {/* <div>{session?.user?.email}</div> */}
+            {/* <div>{session?.user?.id}</div> */}
+            <Link
+              href={`/profile/${session?.user?.id}`}
+              className="inline-flex h-9 items-center justify-center rounded-md border border-black bg-background px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+              prefetch={false}
+            >
+              Profile
+            </Link>
             <LogoutButton />
           </div>
         ) : (
@@ -31,14 +40,14 @@ const NavBar = async () => {
             </Link>
             <Link
               href="/login"
-              className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+              className="inline-flex h-9 items-center justify-center rounded-md border border-black bg-background px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
               prefetch={false}
             >
               Login
             </Link>
             <Link
               href="/signup"
-              className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+              className="inline-flex h-9 items-center justify-center rounded-md border border-black bg-black px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 text-white"
               prefetch={false}
             >
               Signup
@@ -71,14 +80,14 @@ const NavBar = async () => {
                 </Link>
                 <Link
                   href="/login"
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                  className="inline-flex h-9 items-center justify-center rounded-md border border-black bg-background px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                   prefetch={false}
                 >
                   Login
                 </Link>
                 <Link
                   href="/signup"
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                  className="inline-flex h-9 items-center justify-center rounded-md border border-black bg-background px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                   prefetch={false}
                 >
                   Signup
