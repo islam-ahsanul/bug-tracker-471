@@ -4,7 +4,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
 import { db } from '@/utils/db';
-import { saltAndHashPassword } from './helper';
+// import { saltAndHashPassword } from './helper';
 
 export const {
   handlers: { GET, POST },
