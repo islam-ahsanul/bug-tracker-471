@@ -6,7 +6,7 @@ import { Button } from '../ui/button';
 import { oAuthLogin } from '@/server-actions/authServerAction';
 const GoogleLoginButton = () => {
   return (
-    <div>
+    <div className="w-full">
       <Button
         className="flex flex-row items-center justify-center gap-2 w-full"
         onClick={() => oAuthLogin('google')}
