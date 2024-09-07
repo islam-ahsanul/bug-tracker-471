@@ -21,7 +21,9 @@ const ResetPasswordButton = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Reset Password</Button>
+        <Button variant="outline" className="w-[50%]">
+          Reset Password
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

@@ -22,7 +22,11 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
     return <div>You are not authorized</div>;
   }
 
-  return <ProfileData user={user} />;
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-100px)] gap-4 py-4 w-full">
+      <ProfileData user={user} />
+    </div>
+  );
 };
 
 export default ProfilePage;
