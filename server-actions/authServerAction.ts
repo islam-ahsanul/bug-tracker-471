@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { db } from '@/utils/db';
 import { AuthError } from 'next-auth';
 
-const getUserByEmail = async (email: string) => {
+export const getUserByEmail = async (email: string) => {
   try {
     const user = await db.user.findUnique({
       where: {
