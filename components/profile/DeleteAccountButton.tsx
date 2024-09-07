@@ -21,7 +21,10 @@ const DeleteAccountButton = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive" className="w-[50%]">
+        <Button
+          variant="outline"
+          className="w-[50%] border border-red-500 bg-white hover:bg-slate-100 hover:text-red-800 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50 text-red-600"
+        >
           Delete Account
         </Button>
       </DialogTrigger>
@@ -31,7 +34,7 @@ const DeleteAccountButton = () => {
         </DialogHeader>
         <DeleteAccountForm closeDialog={closeDialog} />
         <DialogFooter>
-          <Button variant="outline" onClick={closeDialog}>
+          <Button variant="outline" onClick={closeDialog} className="w-full">
             Cancel
           </Button>
         </DialogFooter>

@@ -112,7 +112,7 @@ const PasswordResetForm = ({ closeDialog }: { closeDialog: () => void }) => {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading}>
+        <Button type="submit" disabled={isLoading} className="w-full">
           {isLoading ? 'Resetting...' : 'Reset Password'}
         </Button>
       </form>

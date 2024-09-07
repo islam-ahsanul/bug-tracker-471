@@ -96,7 +96,12 @@ const DeleteAccountForm = ({ closeDialog }: { closeDialog: () => void }) => {
           )}
         />
 
-        <Button type="submit" disabled={isLoading}>
+        <Button
+          type="submit"
+          disabled={isLoading}
+          variant="destructive"
+          className="w-full"
+        >
           {isLoading ? 'Deleting...' : 'Delete Account'}
         </Button>
       </form>

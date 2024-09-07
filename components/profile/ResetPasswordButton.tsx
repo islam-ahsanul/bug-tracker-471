@@ -31,7 +31,7 @@ const ResetPasswordButton = () => {
         </DialogHeader>
         <PasswordResetForm closeDialog={closeDialog} />
         <DialogFooter>
-          <Button variant="outline" onClick={closeDialog}>
+          <Button variant="outline" onClick={closeDialog} className="w-full">
             Cancel
           </Button>
         </DialogFooter>
