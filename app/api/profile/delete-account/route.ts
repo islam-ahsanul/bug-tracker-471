@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/utils/auth';
 import { db } from '@/utils/db';
 import bcrypt from 'bcryptjs';
-import { logout, getUserByEmail } from '@/server-actions/authServerAction';
+import { getUserByEmail } from '@/server-actions/authServerAction';
 
 export const DELETE = async (request: Request) => {
   const { existingPassword } = await request.json();
@@ -13,15 +13,11 @@ export const DELETE = async (request: Request) => {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  console.log(existingPassword);
-
   try {
     const user = await getUserByEmail(userEmail);
+
     if (!user || !user.hashedPassword) {
-      return NextResponse.json(
-        { message: 'User not found or password not set' },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -35,11 +31,7 @@ export const DELETE = async (request: Request) => {
       );
     }
 
-    await db.user.delete({
-      where: { email: userEmail },
-    });
-
-    await logout();
+    await db.user.delete({ where: { email: userEmail } });
 
     return NextResponse.json(
       { message: 'Account deleted successfully' },

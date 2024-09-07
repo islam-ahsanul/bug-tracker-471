@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
+import { logout } from '@/server-actions/authServerAction';
 
 const formSchema = z.object({
   existingPassword: z
@@ -47,10 +48,14 @@ const DeleteAccountForm = ({ closeDialog }: { closeDialog: () => void }) => {
       });
 
       const data = await response.json();
+
       if (response.ok) {
         toast({
           title: 'Account deleted successfully',
         });
+
+        await logout();
+
         closeDialog();
       } else {
         toast({
