@@ -91,7 +91,7 @@ const SignUpForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
         <FormField
           control={form.control}
           name="name"
@@ -156,8 +156,8 @@ const SignUpForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? 'Submitting...' : 'Sign Up'}
+        <Button type="submit" disabled={isLoading} className="w-full">
+          {isLoading ? 'Submitting...' : 'Create Account'}
         </Button>
       </form>
     </Form>
