@@ -1,4 +1,19 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-  
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .topbar {
+    @apply fixed top-0 z-30 flex w-full items-center justify-between bg-black px-6 py-3;
+  }
+  .leftsidebar {
+    @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r border-r-black bg-black pb-5 pt-28;
+  }
+
+  .leftsidebar_link {
+    @apply relative flex justify-start gap-4 rounded-xl p-4;
+  }
+  .main-container {
+    @apply flex min-h-screen flex-1 flex-col items-center bg-white px-6 pb-10 pt-16 max-md:pb-32 sm:px-10;
+  }
+}
