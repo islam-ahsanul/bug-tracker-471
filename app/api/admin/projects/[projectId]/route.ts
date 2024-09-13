@@ -33,3 +33,63 @@ export const PATCH = async (
     );
   }
 };
+
+export const GET = async (
+  request: Request,
+  { params }: { params: { projectId: string } }
+) => {
+  const session = await auth();
+
+  if (!session || session.user?.role !== 'ADMIN') {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    // Fetch project with manager and developers
+    const project = await db.project.findUnique({
+      where: { id: params.projectId },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        manager: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        developerProjects: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!project) {
+      return NextResponse.json(
+        { message: 'Project not found' },
+        { status: 404 }
+      );
+    }
+
+    // Format the response for developers
+    const developers = project.developerProjects.map(
+      (devProject) => devProject.user
+    );
+
+    return NextResponse.json({ project, developers }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: 'Something went wrong', error },
+      { status: 500 }
+    );
+  }
+};

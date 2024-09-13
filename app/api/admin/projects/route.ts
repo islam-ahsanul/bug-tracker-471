@@ -29,3 +29,22 @@ export const POST = async (request: Request) => {
     );
   }
 };
+
+export const GET = async (request: Request) => {
+  const session = await auth();
+
+  if (!session || session.user?.role !== 'ADMIN') {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const projects = await db.project.findMany();
+
+    return NextResponse.json({ projects }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: 'Something went wrong', errorLog: error },
+      { status: 500 }
+    );
+  }
+};
