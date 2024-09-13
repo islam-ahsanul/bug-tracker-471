@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -54,7 +51,7 @@ model Project {
   updatedAt     DateTime    @updatedAt
   manager       User?       @relation("AssignedProjects", fields: [managerId], references: [id])  // Manager relation
   managerId     String?     @db.ObjectId
-  issues        Issue[]
+  issues        Issue[]     // One-to-many relation to Issues
   
   developerProjects DeveloperProject[]  // Many-to-many relationship using the relation table
 }
@@ -81,13 +78,14 @@ model Issue {
   project       Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   postedBy      User        @relation("PostedIssues", fields: [postedById], references: [id])
   postedById    String      @db.ObjectId
-  tasks         Task[]
+  tasks         Task[]      // List of tasks under this issue
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
 
 enum IssueStatus {
   PENDING
+  IN_PROGRESS   // Added an additional status in case needed
   SOLVED
 }
 

@@ -2,12 +2,12 @@ import React from 'react';
 import { auth } from '@/utils/auth';
 
 import TopBar from '@/components/dasboards/TopBar';
-import LeftSidebar from '@/components/dasboards/admin/LeftSidebar';
+import LeftSidebar from '@/components/dasboards/consumer/LeftSidebar';
 const layout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
   return (
     <main className="flex flex-row">
-      {session?.user.role === 'ADMIN' ? (
+      {session?.user.role === 'CONSUMER' ? (
         <>
           <TopBar />
           <LeftSidebar />
