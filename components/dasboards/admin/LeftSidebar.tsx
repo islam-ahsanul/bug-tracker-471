@@ -7,30 +7,14 @@ import { logout } from '@/server-actions/authServerAction';
 
 export const sidebarLinks = [
   {
-    imgURL: '/home.svg',
-    route: `/admin/dashboard`,
-    label: 'Dashboard',
+    imgURL: '/projects.svg',
+    route: '/admin/allprojects',
+    label: 'Projects',
   },
   {
     imgURL: '/members.svg',
     route: '/admin/allusers',
     label: 'All Users',
-  },
-
-  {
-    imgURL: '/user.svg',
-    route: '/admin/managers',
-    label: 'Managers',
-  },
-  {
-    imgURL: '/developer.svg',
-    route: '/admin/developers',
-    label: 'Developers',
-  },
-  {
-    imgURL: '/projects.svg',
-    route: '/admin/allprojects',
-    label: 'Projects',
   },
 ];
 

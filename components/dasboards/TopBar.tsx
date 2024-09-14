@@ -18,7 +18,7 @@ const TopBar = async () => {
             <p className="text-white font-semibold uppercase">
               {session?.user?.name}
             </p>
-            <p className="text-sm px-1 rounded-full font-semibold text-white">
+            <p className="text-xs px-1 rounded-full font-semibold text-white">
               {session?.user.role}
             </p>
           </div>
