@@ -1,4 +1,3 @@
-// app/api/consumer/projects/[projectId]/issues/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
@@ -14,7 +13,6 @@ export const GET = async (
   }
 
   try {
-    // Fetch all issues for the specific project
     const issues = await db.issue.findMany({
       where: {
         projectId: params.projectId,
@@ -45,7 +43,6 @@ export const GET = async (
   }
 };
 
-// app/api/consumer/projects/[projectId]/issues/route.ts (POST)
 export const POST = async (
   request: Request,
   { params }: { params: { projectId: string } }
@@ -65,7 +62,6 @@ export const POST = async (
   }
 
   try {
-    // Check if project exists
     const project = await db.project.findUnique({
       where: { id: params.projectId },
     });
@@ -77,13 +73,12 @@ export const POST = async (
       );
     }
 
-    // Create the issue for the project
     const issue = await db.issue.create({
       data: {
         title,
         description,
         projectId: params.projectId,
-        postedById: session.user.id, // The ID of the consumer posting the issue
+        postedById: session.user.id, 
         status: 'PENDING',
       },
     });

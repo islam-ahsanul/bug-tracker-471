@@ -13,7 +13,7 @@ export const PATCH = async (
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  // Ensure the new role is valid
+  
   const validRoles = ['CONSUMER', 'ADMIN', 'MANAGER', 'DEVELOPER'];
   if (!validRoles.includes(newRole)) {
     return NextResponse.json({ message: 'Invalid role' }, { status: 400 });

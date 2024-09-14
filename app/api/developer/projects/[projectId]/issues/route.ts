@@ -13,12 +13,11 @@ export const GET = async (
   }
 
   try {
-    // Get all tasks assigned to the logged-in developer for the specific project
     const tasks = await db.task.findMany({
       where: {
         assignedToId: session.user.id,
         issue: {
-          projectId: params.projectId, // Filter by projectId
+          projectId: params.projectId,
         },
       },
       select: {

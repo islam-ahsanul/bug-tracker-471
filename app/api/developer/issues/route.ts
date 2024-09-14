@@ -1,4 +1,3 @@
-// app/api/developer/issues/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
@@ -11,7 +10,6 @@ export const GET = async () => {
   }
 
   try {
-    // Fetch all tasks/issues assigned to the developer
     const tasks = await db.task.findMany({
       where: {
         assignedToId: session.user.id,

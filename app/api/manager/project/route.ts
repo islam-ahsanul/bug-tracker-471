@@ -1,4 +1,3 @@
-// app/api/manager/project/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';

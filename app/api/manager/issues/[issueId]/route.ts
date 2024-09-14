@@ -1,4 +1,3 @@
-// app/api/manager/issues/[issueId]/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
@@ -14,7 +13,6 @@ export const GET = async (
   }
 
   try {
-    // Fetch issue by ID
     const issue = await db.issue.findUnique({
       where: { id: params.issueId },
       select: {

@@ -1,4 +1,3 @@
-// app/api/developer/projects/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
@@ -11,7 +10,6 @@ export const GET = async () => {
   }
 
   try {
-    // Fetch all projects assigned to the developer
     const projects = await db.project.findMany({
       where: {
         developerProjects: {

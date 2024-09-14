@@ -1,8 +1,7 @@
-// app/api/developer/tasks/[taskId]/status/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
-import { TaskStatus, IssueStatus } from '@prisma/client'; // Import the enums from Prisma
+import { TaskStatus, IssueStatus } from '@prisma/client'; 
 
 export const PATCH = async (
   request: Request,
@@ -16,12 +15,10 @@ export const PATCH = async (
   }
 
   try {
-    // Validate the status to ensure it's a valid TaskStatus enum value
     if (!['PENDING', 'IN_PROGRESS', 'SOLVED'].includes(status)) {
       return NextResponse.json({ message: 'Invalid status' }, { status: 400 });
     }
 
-    // Fetch the task and related issue
     const task = await db.task.findUnique({
       where: { id: params.taskId },
       select: {
@@ -35,15 +32,13 @@ export const PATCH = async (
       return NextResponse.json({ message: 'Task not found' }, { status: 404 });
     }
 
-    // Update the task status
     await db.task.update({
       where: { id: params.taskId },
       data: {
-        status: status as TaskStatus, // Ensure status is a valid enum value
+        status: status as TaskStatus, 
       },
     });
 
-    // If task status is solved, update the corresponding issue's status
     if (status === 'SOLVED') {
       await db.issue.update({
         where: { id: task.issueId },
