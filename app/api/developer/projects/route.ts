@@ -1,3 +1,4 @@
+// app/api/developer/projects/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
@@ -10,29 +11,25 @@ export const GET = async () => {
   }
 
   try {
-    // Get all projects assigned to the logged-in developer
-    const developerProjects = await db.developerProject.findMany({
-      where: { userId: session.user.id },
-      select: {
-        project: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            createdAt: true,
-            updatedAt: true,
+    // Fetch all projects assigned to the developer
+    const projects = await db.project.findMany({
+      where: {
+        developerProjects: {
+          some: {
+            userId: session.user.id,
           },
         },
       },
+      select: {
+        id: true,
+        name: true,
+      },
     });
 
-    return NextResponse.json(
-      { projects: developerProjects.map((dp) => dp.project) },
-      { status: 200 }
-    );
+    return NextResponse.json({ projects }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { message: 'Something went wrong', errorLog: error },
+      { message: 'Error fetching projects', error },
       { status: 500 }
     );
   }

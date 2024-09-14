@@ -10,7 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 enum Role {
   CONSUMER
   ADMIN
@@ -44,16 +43,16 @@ model User {
 }
 
 model Project {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  description   String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  manager       User?       @relation("AssignedProjects", fields: [managerId], references: [id])  // Manager relation
-  managerId     String?     @db.ObjectId
-  issues        Issue[]     // One-to-many relation to Issues
-  
-  developerProjects DeveloperProject[]  // Many-to-many relationship using the relation table
+  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  description        String?
+  managerId          String?             @db.ObjectId
+  manager            User?               @relation("AssignedProjects", fields: [managerId], references: [id])
+  issues             Issue[]
+  tasks              Task[]              @relation("TaskProject")  // Relation to Task
+  developerProjects  DeveloperProject[]  @relation("ProjectDeveloper") // Relation to DeveloperProject
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 }
 
 model DeveloperProject {
@@ -61,7 +60,7 @@ model DeveloperProject {
   userId        String    @db.ObjectId
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   projectId     String    @db.ObjectId
-  project       Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project       Project   @relation(name: "ProjectDeveloper", fields: [projectId], references: [id], onDelete: Cascade) // Relation to Project with explicit name
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -96,6 +95,8 @@ model Task {
   assignedTo    User?       @relation("AssignedTasks", fields: [assignedToId], references: [id])
   assignedToId  String?     @db.ObjectId
   status        TaskStatus  @default(PENDING)
+  projectId     String      @db.ObjectId  // Add this field to link to the project
+  project       Project     @relation(name: "TaskProject", fields: [projectId], references: [id], onDelete: Cascade)  // Relation to Project with explicit name
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }

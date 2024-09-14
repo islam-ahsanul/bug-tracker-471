@@ -16,9 +16,13 @@ export const POST = async (
   }
 
   try {
-    // Ensure the issue exists
+    // Ensure the issue exists and get the projectId from the related issue
     const issue = await db.issue.findUnique({
       where: { id: params.issueId },
+      select: {
+        id: true,
+        projectId: true, // Fetch the projectId
+      },
     });
 
     if (!issue) {
@@ -46,11 +50,12 @@ export const POST = async (
       },
     });
 
-    // Assign the task to the developer
+    // Assign the task to the developer and include the projectId
     await db.task.create({
       data: {
         issueId: params.issueId,
         assignedToId: developerId,
+        projectId: issue.projectId, // Include the projectId from the related issue
         status: 'PENDING',
       },
     });

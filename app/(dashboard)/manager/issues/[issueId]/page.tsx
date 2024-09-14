@@ -22,6 +22,8 @@ export default function IssueDetail() {
   const [developers, setDevelopers] = useState<Developer[]>([]); // List of developers to assign tasks to
   const [selectedDeveloper, setSelectedDeveloper] = useState<string>(''); // Selected developer
   const [loading, setLoading] = useState(true); // Loading state
+  const [assigning, setAssigning] = useState(false); // Task assignment loading state
+  const [error, setError] = useState<string | null>(null); // Error state
   const { issueId } = useParams();
   const router = useRouter();
 
@@ -31,16 +33,20 @@ export default function IssueDetail() {
 
     const fetchIssueAndDevelopers = async () => {
       setLoading(true);
+      setError(null); // Clear any previous error
       try {
         const issueRes = await fetch(`/api/manager/issues/${issueId}`);
+        if (!issueRes.ok) throw new Error('Failed to fetch issue details');
         const { issue } = await issueRes.json();
         setIssue(issue);
 
         const developersRes = await fetch(`/api/manager/developers`);
+        if (!developersRes.ok) throw new Error('Failed to fetch developers');
         const { developers } = await developersRes.json();
         setDevelopers(developers);
       } catch (err) {
         console.error('Error fetching issue or developers', err);
+        setError('Failed to load issue or developer data. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -52,22 +58,31 @@ export default function IssueDetail() {
   // Handle assigning a task to a developer
   const handleAssignTask = async () => {
     if (!selectedDeveloper) return;
+    setAssigning(true);
+    setError(null); // Clear any previous error
     try {
       const res = await fetch(`/api/manager/issues/${issueId}/assign-task`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ developerId: selectedDeveloper }),
       });
-      if (res.ok) {
-        router.push('/manager/dashboard'); // Redirect back to the dashboard after task is assigned
-      }
+      if (!res.ok) throw new Error('Failed to assign task');
+      // Show success message, then redirect
+      setTimeout(() => router.push('/manager/dashboard'), 1000); // Optional delay for better UX
     } catch (err) {
       console.error('Error assigning task', err);
+      setError('Failed to assign task. Please try again.');
+    } finally {
+      setAssigning(false);
     }
   };
 
   if (loading) {
     return <p>Loading issue details...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>; // Display error message if there was an issue
   }
 
   return (
@@ -85,6 +100,7 @@ export default function IssueDetail() {
             value={selectedDeveloper}
             onChange={(e) => setSelectedDeveloper(e.target.value)}
             className="border p-2 mb-4 w-full"
+            disabled={assigning} // Disable during assignment
           >
             <option value="">Select Developer</option>
             {developers.map((dev) => (
@@ -97,9 +113,9 @@ export default function IssueDetail() {
           <button
             onClick={handleAssignTask}
             className="bg-blue-500 text-white py-2 px-4"
-            disabled={!selectedDeveloper} // Disable if no developer is selected
+            disabled={!selectedDeveloper || assigning} // Disable if no developer is selected or while assigning
           >
-            Assign Task
+            {assigning ? 'Assigning...' : 'Assign Task'}
           </button>
         </div>
       ) : (
