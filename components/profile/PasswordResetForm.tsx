@@ -75,6 +75,8 @@ const PasswordResetForm = ({ closeDialog }: { closeDialog: () => void }) => {
     }
   };
 
+   // console.log(session);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
