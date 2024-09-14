@@ -1,10 +1,10 @@
-// app/admin/allprojects/page.tsx
+
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Define types for Project
+
 interface Project {
   id: string;
   name: string;
