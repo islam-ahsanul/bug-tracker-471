@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Define types for Project and Task
+
 interface Task {
   id: string;
   title: string;
@@ -23,22 +23,22 @@ interface Project {
 }
 
 export default function DeveloperDashboard() {
-  const [projects, setProjects] = useState<Project[]>([]); // List of all projects assigned to the developer
-  const [tasks, setTasks] = useState<Task[]>([]); // List of all tasks assigned to the developer
-  const [loading, setLoading] = useState(true); // Loading state to handle data fetching
+  const [projects, setProjects] = useState<Project[]>([]); 
+  const [tasks, setTasks] = useState<Task[]>([]); 
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Fetch developer's projects and tasks
+ 
   useEffect(() => {
     const fetchDeveloperData = async () => {
       setLoading(true);
       try {
-        // Fetch projects assigned to the developer
+       
         const projectsRes = await fetch('/api/developer/projects');
         const { projects } = await projectsRes.json();
         setProjects(projects);
 
-        // Fetch tasks/issues assigned to the developer
+        
         const tasksRes = await fetch('/api/developer/issues');
         const { tasks } = await tasksRes.json();
         setTasks(tasks);
