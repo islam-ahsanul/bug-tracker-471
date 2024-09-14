@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 
-// Define types for Project and User
+
 interface Project {
   id: string;
   name: string;
@@ -19,16 +19,16 @@ interface User {
 }
 
 export default function ProjectDetails() {
-  const [project, setProject] = useState<Project | null>(null); // State typed as Project or null
-  const [users, setUsers] = useState<User[]>([]); // Users array of type User[]
-  const [developers, setDevelopers] = useState<User[]>([]); // Developers array
-  const [selectedDeveloper, setSelectedDeveloper] = useState<string>(''); // Single developer selection
-  const [selectedManager, setSelectedManager] = useState<string | null>(null); // Single manager selection
+  const [project, setProject] = useState<Project | null>(null); 
+  const [users, setUsers] = useState<User[]>([]); 
+  const [developers, setDevelopers] = useState<User[]>([]); 
+  const [selectedDeveloper, setSelectedDeveloper] = useState<string>(''); 
+  const [selectedManager, setSelectedManager] = useState<string | null>(null); 
   const router = useRouter();
   const params = useParams();
   const { projectId } = params;
 
-  // Fetch project details and users on component mount
+ 
   useEffect(() => {
     if (!projectId) return;
 
@@ -50,7 +50,7 @@ export default function ProjectDetails() {
     fetchProjectAndUsers();
   }, [projectId]);
 
-  // Handle assigning a developer
+  
   const handleAssignDeveloper = async () => {
     try {
       const res = await fetch(
@@ -58,18 +58,18 @@ export default function ProjectDetails() {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ developerId: selectedDeveloper }), // Send single developer ID
+          body: JSON.stringify({ developerId: selectedDeveloper }), 
         }
       );
       if (res.ok) {
-        router.refresh(); // Refresh the page to reflect the newly assigned developer
+        router.refresh(); 
       }
     } catch (err) {
       console.error('Error assigning developer', err);
     }
   };
 
-  // Handle assigning a manager
+ 
   const handleAssignManager = async () => {
     try {
       const res = await fetch(
@@ -81,14 +81,14 @@ export default function ProjectDetails() {
         }
       );
       if (res.ok) {
-        router.refresh(); // Refresh the page to reflect the newly assigned manager
+        router.refresh(); 
       }
     } catch (err) {
       console.error('Error assigning manager', err);
     }
   };
 
-  // Handle removing a manager
+  
   const handleRemoveManager = async () => {
     try {
       const res = await fetch(
@@ -98,14 +98,14 @@ export default function ProjectDetails() {
         }
       );
       if (res.ok) {
-        router.refresh(); // Refresh the page after removing manager
+        router.refresh(); 
       }
     } catch (err) {
       console.error('Error removing manager', err);
     }
   };
 
-  // Handle removing a developer
+
   const handleRemoveDeveloper = async (developerId: string) => {
     try {
       const res = await fetch(
@@ -117,7 +117,7 @@ export default function ProjectDetails() {
         }
       );
       if (res.ok) {
-        router.refresh(); // Refresh the page after removing developer
+        router.refresh(); 
       }
     } catch (err) {
       console.error('Error removing developer', err);
