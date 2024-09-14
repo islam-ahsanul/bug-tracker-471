@@ -9,6 +9,7 @@ import LogoutButton from '../auth_forms/logoutButton';
 const NavBar = async () => {
   const session = await auth();
   // console.log(session);
+   // console.log(session.user);
   return (
     <header className="w-full bg-background shadow-sm">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
