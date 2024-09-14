@@ -1,9 +1,8 @@
-// app/admin/users/page.tsx
+
 'use client';
 
 import { useState, useEffect } from 'react';
 
-// Define types for User
 interface User {
   id: string;
   name: string;
@@ -12,7 +11,7 @@ interface User {
 }
 
 export default function AdminUsers() {
-  const [users, setUsers] = useState<User[]>([]); // State typed as User[]
+  const [users, setUsers] = useState<User[]>([]); 
 
   useEffect(() => {
     const fetchUsers = async () => {
