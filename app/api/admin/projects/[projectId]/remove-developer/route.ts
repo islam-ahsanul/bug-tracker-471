@@ -1,4 +1,3 @@
-// app/api/admin/projects/[projectId]/remove-developer/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
@@ -15,7 +14,6 @@ export const DELETE = async (
   }
 
   try {
-    // Remove the developer from the project
     await db.developerProject.deleteMany({
       where: {
         userId: developerId,

@@ -14,7 +14,6 @@ export const POST = async (
   }
 
   try {
-    // Ensure the user being assigned is a manager
     const manager = await db.user.findUnique({
       where: { id: managerId },
       select: { roles: true },

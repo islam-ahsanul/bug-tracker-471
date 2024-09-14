@@ -11,7 +11,6 @@ export const GET = async () => {
   }
 
   try {
-    // Fetch all projects
     const projects = await db.project.findMany({
       select: {
         id: true,

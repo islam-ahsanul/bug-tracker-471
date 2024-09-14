@@ -11,7 +11,6 @@ export const GET = async () => {
   }
 
   try {
-    // Fetch all users with the role of DEVELOPER
     const developers = await db.user.findMany({
       where: {
         roles: 'DEVELOPER',

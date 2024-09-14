@@ -29,8 +29,8 @@ export const POST = async (request: Request) => {
         title,
         description,
         projectId,
-        postedById: session.user.id, // The consumer who posted the issue
-        status: 'PENDING', // Default status
+        postedById: session.user.id,
+        status: 'PENDING',
       },
     });
 

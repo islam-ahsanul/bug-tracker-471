@@ -11,7 +11,6 @@ export const GET = async () => {
   }
 
   try {
-    // Fetch the project assigned to the manager
     const project = await db.project.findFirst({
       where: {
         managerId: session.user.id,
@@ -25,7 +24,6 @@ export const GET = async () => {
       );
     }
 
-    // Fetch all issues for the manager's project
     const issues = await db.issue.findMany({
       where: {
         projectId: project.id,
