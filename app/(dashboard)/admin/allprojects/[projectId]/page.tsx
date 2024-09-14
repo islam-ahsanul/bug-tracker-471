@@ -172,7 +172,7 @@ export default function ProjectDetails() {
                   {dev.name} ({dev.email}){' '}
                   <button
                     onClick={() => handleRemoveDeveloper(dev.id)}
-                    className="bg-red-500 text-white py-1 px-2 ml-2 my-4 rounded-lg"
+                    className="bg-red-500 text-white py-1 px-2 ml-2 my-2 rounded-lg"
                   >
                     Remove
                   </button>
