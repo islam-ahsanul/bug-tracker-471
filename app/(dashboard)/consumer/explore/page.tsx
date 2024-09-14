@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Define types for Project
+
 interface Project {
   id: string;
   name: string;
@@ -11,14 +11,14 @@ interface Project {
 }
 
 export default function Projects() {
-  const [projects, setProjects] = useState<Project[]>([]); // List of projects
+  const [projects, setProjects] = useState<Project[]>([]); 
   const router = useRouter();
 
-  // Fetch all projects created by the admin
+
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await fetch('/api/consumer/projects'); // Fetch projects from API
+        const res = await fetch('/api/consumer/projects');
         const data = await res.json();
         setProjects(data.projects);
       } catch (err) {
@@ -30,7 +30,7 @@ export default function Projects() {
   }, []);
 
   const handleProjectClick = (projectId: string) => {
-    // Navigate to the project detail page
+   
     router.push(`/consumer/explore/${projectId}`);
   };
 
@@ -44,7 +44,7 @@ export default function Projects() {
             <li
               key={project.id}
               className="border p-4 cursor-pointer hover:bg-gray-100"
-              onClick={() => handleProjectClick(project.id)} // Click to go to the project detail page
+              onClick={() => handleProjectClick(project.id)}
             >
               <h2 className="text-xl font-semibold">{project.name}</h2>
               <p className="text-gray-700">{project.description}</p>
