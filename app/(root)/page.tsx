@@ -27,8 +27,11 @@ const Home = async () => {
           BUG TRACKER
         </span>
       </p>
-
-      <Link href={path}>Go to Dashboard</Link>
+      {session?.user && (
+        <Link href={path} className="text-pink-700 mt-10">
+          Go to Dashboard
+        </Link>
+      )}
     </div>
   );
 };
