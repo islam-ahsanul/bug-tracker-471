@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 
-// Define types for Project and Issue
+
 interface Issue {
   id: string;
   title: string;
@@ -12,7 +12,7 @@ interface Issue {
   postedBy: {
     name: string;
     email: string;
-  } | null; // Handle case where postedBy may be null or undefined
+  } | null; 
 }
 
 interface Project {
@@ -22,21 +22,21 @@ interface Project {
 }
 
 export default function ProjectDetail() {
-  const [project, setProject] = useState<Project | null>(null); // The current project
-  const [issues, setIssues] = useState<Issue[]>([]); // List of all issues for this project
-  const [title, setTitle] = useState(''); // Issue title
-  const [description, setDescription] = useState(''); // Issue description
-  const [loading, setLoading] = useState(true); // Loading state to handle data fetching
+  const [project, setProject] = useState<Project | null>(null); 
+  const [issues, setIssues] = useState<Issue[]>([]); 
+  const [title, setTitle] = useState(''); 
+  const [description, setDescription] = useState(''); 
+  const [loading, setLoading] = useState(true); 
   const router = useRouter();
   const params = useParams();
   const { projectId } = params;
 
-  // Fetch project details and issues based on the projectId
+
   useEffect(() => {
     if (!projectId) return;
 
     const fetchProject = async () => {
-      setLoading(true); // Set loading to true while fetching data
+      setLoading(true); 
       try {
         const projectRes = await fetch(`/api/consumer/projects/${projectId}`);
         const { project } = await projectRes.json();
@@ -50,14 +50,14 @@ export default function ProjectDetail() {
       } catch (err) {
         console.error('Error fetching project or issues', err);
       } finally {
-        setLoading(false); // Set loading to false after fetching is complete
+        setLoading(false); 
       }
     };
 
     fetchProject();
   }, [projectId]);
 
-  // Handle submitting the issue
+
   const handlePostIssue = async () => {
     try {
       const res = await fetch(`/api/consumer/projects/${projectId}/issues`, {
@@ -70,16 +70,16 @@ export default function ProjectDetail() {
       });
       if (res.ok) {
         const { issues: newIssue } = await res.json();
-        setIssues((prevIssues) => [newIssue, ...prevIssues]); // Add new issue to the top
-        setTitle(''); // Clear title
-        setDescription(''); // Clear description
+        setIssues((prevIssues) => [newIssue, ...prevIssues]); 
+        setTitle('');
+        setDescription('');
       }
     } catch (err) {
       console.error('Error posting issue', err);
     }
   };
 
-  // Conditional rendering based on loading state
+ 
   if (loading) {
     return <p>Loading project details...</p>;
   }
