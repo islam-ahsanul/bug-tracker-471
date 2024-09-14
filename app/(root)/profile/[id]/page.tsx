@@ -8,6 +8,9 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
 
   const session = await auth();
 
+   // console.log(session);
+   // console.log(session.user);
+
   if (!session) {
     return <div>Please Login to continue</div>;
   }
