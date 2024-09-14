@@ -29,3 +29,5 @@ const TopBar = async () => {
 };
 
 export default TopBar;
+
+// should change the font size later on
