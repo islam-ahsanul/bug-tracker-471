@@ -55,35 +55,45 @@ export default function DeveloperDashboard() {
   };
 
   if (loading) {
-    return <p>Loading issues...</p>;
+    return <div className="flex justify-center items-center h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    </div>;
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Developer Dashboard</h1>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8 text-gray-800">Developer Dashboard</h1>
       {issues.length > 0 ? (
-        <ul className="space-y-4">
+        <div className="space-y-6">
           {issues.map((issue) => (
-            <li key={issue.id} className="border p-4">
-              <h2 className="text-xl font-semibold mb-2">{issue.title}</h2>
-              <p className="mb-2">{issue.description}</p>
-              <p className="text-sm text-gray-500">Status: {issue.status}</p>
-
-              {/* Dropdown for issue status change */}
-              <select
-                value={issue.status}
-                onChange={(e) => updateIssueStatus(issue.id, e.target.value)}
-                className="border p-2 mt-2"
-              >
-                <option value="PENDING">Pending</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="SOLVED">Solved</option>
-              </select>
-            </li>
+            <div key={issue.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="p-6">
+                <h2 className="text-xl font-semibold mb-2 text-gray-800">{issue.title}</h2>
+                <p className="text-gray-600 mb-4">{issue.description}</p>
+                <div className="flex items-center justify-between">
+                  <span className={`px-2 py-1 rounded-full ${
+                    issue.status === 'SOLVED' ? 'bg-green-100 text-green-800' :
+                    issue.status === 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}>
+                    {issue.status.replace('_', ' ')}
+                  </span>
+                  <select
+                    value={issue.status}
+                    onChange={(e) => updateIssueStatus(issue.id, e.target.value)}
+                    className="border rounded-md p-2 text-sm"
+                  >
+                    <option value="PENDING">Pending</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="SOLVED">Solved</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
-        <p>No issues assigned yet.</p>
+        <p className="text-center text-gray-600 text-lg">No issues assigned yet.</p>
       )}
     </div>
   );
