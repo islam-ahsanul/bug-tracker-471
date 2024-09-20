@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 // Import new components
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Project {
   id: string;
@@ -15,12 +15,12 @@ interface Project {
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const fetchProjects = async () => {
-      setLoading(true); // Set loading to true before fetching
+      setLoading(true);
       try {
         const res = await fetch('/api/consumer/projects');
         const data = await res.json();
@@ -28,7 +28,7 @@ export default function Projects() {
       } catch (err) {
         console.error('Error fetching projects', err);
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     };
 
@@ -44,7 +44,6 @@ export default function Projects() {
       <h1 className="text-3xl font-bold mb-6">Explore Projects</h1>
 
       {loading ? (
-        // Show skeleton loader while fetching data
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, index) => (
             <Card key={index}>
@@ -61,7 +60,10 @@ export default function Projects() {
       ) : projects.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
-            <Card key={project.id} className="hover:shadow-lg transition-shadow duration-300">
+            <Card
+              key={project.id}
+              className="hover:shadow-lg transition-shadow duration-300"
+            >
               <CardHeader>
                 <CardTitle>{project.name}</CardTitle>
               </CardHeader>
@@ -75,7 +77,9 @@ export default function Projects() {
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-600">No projects available at the moment.</p>
+        <p className="text-center text-gray-600">
+          No projects available at the moment.
+        </p>
       )}
     </div>
   );
