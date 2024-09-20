@@ -10,30 +10,21 @@ export const GET = async () => {
   }
 
   try {
+    // Fetch all tasks assigned to the developer and include the related issue with correct status
     const tasks = await db.task.findMany({
-      where: {
-        assignedToId: session.user.id,
-      },
-      select: {
-        id: true,
-        status: true,
-        issue: {
-          select: {
-            title: true,
-          },
-        },
-        project: {
-          select: {
-            name: true,
-          },
-        },
+      where: { assignedToId: session.user.id },
+      include: {
+        issue: true, // Include the correct issue status
       },
     });
 
-    return NextResponse.json({ tasks }, { status: 200 });
+    // Map tasks to issues (removing duplicates if needed)
+    const issues = tasks.map((task) => task.issue);
+
+    return NextResponse.json({ issues }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { message: 'Error fetching tasks', error },
+      { message: 'Error fetching assigned issues', error },
       { status: 500 }
     );
   }

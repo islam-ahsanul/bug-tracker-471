@@ -94,9 +94,8 @@ model Task {
   issue         Issue       @relation(fields: [issueId], references: [id], onDelete: Cascade)
   assignedTo    User?       @relation("AssignedTasks", fields: [assignedToId], references: [id])
   assignedToId  String?     @db.ObjectId
-  status        TaskStatus  @default(PENDING)
-  projectId     String      @db.ObjectId  // Add this field to link to the project
-  project       Project     @relation(name: "TaskProject", fields: [projectId], references: [id], onDelete: Cascade)  // Relation to Project with explicit name
+  projectId     String      @db.ObjectId
+  project       Project     @relation(name: "TaskProject", fields: [projectId], references: [id], onDelete: Cascade)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }

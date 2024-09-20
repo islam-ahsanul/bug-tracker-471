@@ -39,14 +39,13 @@ export const PATCH = async (
       },
     });
 
-    if (status === 'SOLVED') {
-      await db.issue.update({
-        where: { id: task.issueId },
-        data: {
-          status: IssueStatus.SOLVED,
-        },
-      });
-    }
+    // Update the associated issue status
+    await db.issue.update({
+      where: { id: task.issueId },
+      data: {
+        status: status as IssueStatus,
+      },
+    });
 
     return NextResponse.json(
       { message: 'Task and issue status updated successfully' },

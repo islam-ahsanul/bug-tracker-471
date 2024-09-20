@@ -1,99 +1,89 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
-
-interface Task {
+// Define types for Issue
+interface Issue {
   id: string;
   title: string;
   description: string;
   status: string;
-  issue: {
-    title: string;
-  };
-  project: {
-    name: string;
-  };
-}
-
-interface Project {
-  id: string;
-  name: string;
 }
 
 export default function DeveloperDashboard() {
-  const [projects, setProjects] = useState<Project[]>([]); 
-  const [tasks, setTasks] = useState<Task[]>([]); 
+  const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
- 
   useEffect(() => {
-    const fetchDeveloperData = async () => {
-      setLoading(true);
+    const fetchIssues = async () => {
       try {
-       
-        const projectsRes = await fetch('/api/developer/projects');
-        const { projects } = await projectsRes.json();
-        setProjects(projects);
-
-        
-        const tasksRes = await fetch('/api/developer/issues');
-        const { tasks } = await tasksRes.json();
-        setTasks(tasks);
-      } catch (err) {
-        console.error('Error fetching developer data', err);
+        const res = await fetch('/api/developer/issues');
+        const data = await res.json();
+        setIssues(data.issues);
+      } catch (error) {
+        console.error('Error fetching issues:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDeveloperData();
+    fetchIssues();
   }, []);
 
+  const updateIssueStatus = async (issueId: string, status: string) => {
+    try {
+      // Ensure correct issueId and API path
+      const res = await fetch(`/api/developer/issues/${issueId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to update issue status');
+      }
+
+      // Handle success
+      setIssues((prevIssues) =>
+        prevIssues.map((issue) =>
+          issue.id === issueId ? { ...issue, status } : issue
+        )
+      );
+    } catch (error) {
+      console.error('Error updating issue status:', error);
+    }
+  };
+
   if (loading) {
-    return <p>Loading dashboard...</p>;
+    return <p>Loading issues...</p>;
   }
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Developer Dashboard</h1>
-
-      <h2 className="text-xl mt-4 mb-2">Projects</h2>
-      {projects.length > 0 ? (
+      {issues.length > 0 ? (
         <ul className="space-y-4">
-          {projects.map((project) => (
-            <li key={project.id} className="border p-4">
-              <h3 className="text-lg font-semibold">{project.name}</h3>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No projects assigned yet.</p>
-      )}
+          {issues.map((issue) => (
+            <li key={issue.id} className="border p-4">
+              <h2 className="text-xl font-semibold mb-2">{issue.title}</h2>
+              <p className="mb-2">{issue.description}</p>
+              <p className="text-sm text-gray-500">Status: {issue.status}</p>
 
-      <h2 className="text-xl mt-8 mb-4">Assigned Tasks</h2>
-      {tasks.length > 0 ? (
-        <ul className="space-y-4">
-          {tasks.map((task) => (
-            <li key={task.id} className="border p-4">
-              <h3 className="text-lg font-semibold">{task.issue.title}</h3>
-              <p className="text-sm">Project: {task.project.name}</p>
-              <p className="text-sm">Status: {task.status}</p>
-
-              {/* Button to view and update the task */}
-              <button
-                className="bg-blue-500 text-white py-2 px-4 mt-2"
-                onClick={() => router.push(`/developer/tasks/${task.id}`)}
+              {/* Dropdown for issue status change */}
+              <select
+                value={issue.status}
+                onChange={(e) => updateIssueStatus(issue.id, e.target.value)}
+                className="border p-2 mt-2"
               >
-                View and Update Task
-              </button>
+                <option value="PENDING">Pending</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="SOLVED">Solved</option>
+              </select>
             </li>
           ))}
         </ul>
       ) : (
-        <p>No tasks assigned yet.</p>
+        <p>No issues assigned yet.</p>
       )}
     </div>
   );
