@@ -75,12 +75,16 @@ export default function ManagerDashboard() {
                   <p className="text-gray-600 mb-4">{issue.description}</p>
                   <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
                     <span>Posted by: {issue.postedBy.name}</span>
-                    <span className={`px-2 py-1 rounded ${issue.status === 'Open' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    <span className={`px-2 py-1 rounded-full ${
+                    issue.status === 'SOLVED' ? 'bg-green-100 text-green-800' :
+                    issue.status === 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}>
                       {issue.status}
                     </span>
                   </div>
                   <button
-                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-300"
+                    className="text-sm bg-gray-100 hover:bg-blue-600 text-gray-600 font-semibold py-2 px-4 rounded transition-colors duration-300 hover:text-white"
                     onClick={() => router.push(`/manager/issues/${issue.id}`)}
                   >
                     View and Assign Task
