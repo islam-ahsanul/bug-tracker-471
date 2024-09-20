@@ -69,8 +69,8 @@ export default function ProjectDetail() {
         }),
       });
       if (res.ok) {
-        const { issues: newIssue } = await res.json();
-        setIssues((prevIssues) => [newIssue, ...prevIssues]); 
+        const { issue } = await res.json();
+        setIssues((prevIssues) => [issue, ...prevIssues]);
         setTitle('');
         setDescription('');
       }
@@ -117,7 +117,7 @@ export default function ProjectDetail() {
           <button
             onClick={handlePostIssue}
             className="bg-blue-500 text-white py-2 px-4"
-            disabled={!title || !description} // Disable if fields are empty
+            disabled={!title || !description}
           >
             Post Issue
           </button>

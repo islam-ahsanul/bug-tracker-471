@@ -78,8 +78,16 @@ export const POST = async (
         title,
         description,
         projectId: params.projectId,
-        postedById: session.user.id, 
+        postedById: session.user.id,
         status: 'PENDING',
+      },
+      include: {
+        postedBy: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
       },
     });
 
