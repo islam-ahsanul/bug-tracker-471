@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import CreateNewProjectForm from '@/components/dasboards/admin/createNewProjectForm';
+import { FiEdit } from "react-icons/fi";
 
 interface Project {
   id: string;
@@ -33,26 +34,32 @@ export default function AdminProjects() {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Projects</h1>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Projects</h1>
       <CreateNewProjectForm onProjectCreated={handleNewProject} setChanged={setChanged} />
 
-      <h2 className="text-xl mb-2">Existing Projects</h2>
-      <ul className="space-y-2">
-        {projects.map((project) => (
-          <div key={project.id} className="p-4 border-b">
-            <h3 className="font-semibold text-lg">{project.name || 'Unnamed Project'}</h3>
-            <p className="mb-2 text-gray-500">{project.description || 'No description'}</p>
-
-            <Link
-              href={`/admin/allprojects/${project.id}`}
-              className="bg-green-500 text-white py-1 px-3 my-4 rounded-full"
-            >
-              Manage
-            </Link>
-          </div>
-        ))}
-      </ul>
+      <div className="bg-white shadow-md rounded-lg overflow-hidden">
+        <h2 className="text-xl font-semibold p-4 bg-gray-50 border-b">Existing Projects</h2>
+        <ul className="divide-y divide-gray-200">
+          {projects.map((project) => (
+            <li key={project.id} className="p-4 hover:bg-gray-50 transition-colors">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="font-semibold text-lg">{project.name || 'Unnamed Project'}</h3>
+                  <p className="text-gray-500">{project.description || 'No description'}</p>
+                </div>
+                <Link
+                  href={`/admin/allprojects/${project.id}`}
+                  className="inline-flex items-center text-blue-500 hover:text-blue-700 transition-colors"
+                >
+                  <FiEdit className="mr-1 text-lg" />
+                  Manage
+                </Link>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
