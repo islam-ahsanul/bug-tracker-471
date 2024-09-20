@@ -1,4 +1,3 @@
-// app/api/manager/developers/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
@@ -11,7 +10,6 @@ export const GET = async () => {
   }
 
   try {
-    // Fetch all users with the role of DEVELOPER
     const developers = await db.user.findMany({
       where: {
         roles: 'DEVELOPER',

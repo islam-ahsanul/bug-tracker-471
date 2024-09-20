@@ -45,7 +45,6 @@ export const GET = async (
   }
 
   try {
-    // Fetch project with manager and developers
     const project = await db.project.findUnique({
       where: { id: params.projectId },
       select: {
@@ -80,7 +79,6 @@ export const GET = async (
       );
     }
 
-    // Format the response for developers
     const developers = project.developerProjects.map(
       (devProject) => devProject.user
     );

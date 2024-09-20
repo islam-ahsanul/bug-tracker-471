@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Define types for Project and Issue
+
 interface Issue {
   id: string;
   title: string;
@@ -22,22 +22,22 @@ interface Project {
 }
 
 export default function ManagerDashboard() {
-  const [project, setProject] = useState<Project | null>(null); // The current project assigned to the manager
-  const [issues, setIssues] = useState<Issue[]>([]); // List of all issues for the manager's project
-  const [loading, setLoading] = useState(true); // Loading state to handle data fetching
+  const [project, setProject] = useState<Project | null>(null); 
+  const [issues, setIssues] = useState<Issue[]>([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Fetch project and issues for the manager
+  
   useEffect(() => {
     const fetchManagerProject = async () => {
       setLoading(true);
       try {
-        // Fetch the manager's assigned project
+        
         const projectRes = await fetch('/api/manager/project');
         const { project } = await projectRes.json();
         setProject(project);
 
-        // Fetch all issues for the manager's project
+       
         const issuesRes = await fetch(`/api/manager/issues`);
         const { issues } = await issuesRes.json();
         setIssues(issues);

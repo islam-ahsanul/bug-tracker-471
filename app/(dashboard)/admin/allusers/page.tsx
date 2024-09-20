@@ -1,9 +1,8 @@
-// app/admin/users/page.tsx
+
 'use client';
 
 import { useState, useEffect } from 'react';
 
-// Define types for User
 interface User {
   id: string;
   name: string;

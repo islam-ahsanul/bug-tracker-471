@@ -13,7 +13,6 @@ export const PATCH = async (
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  // Ensure the status is valid
   const validStatuses = ['PENDING', 'IN_PROGRESS', 'SOLVED'];
   if (!validStatuses.includes(status)) {
     return NextResponse.json(
@@ -23,11 +22,10 @@ export const PATCH = async (
   }
 
   try {
-    // Check if the task is assigned to the developer
     const task = await db.task.findFirst({
       where: {
         id: params.taskId,
-        assignedToId: session.user.id, // Ensure the developer is assigned to the task
+        assignedToId: session.user.id,
       },
     });
 
@@ -38,7 +36,6 @@ export const PATCH = async (
       );
     }
 
-    // Update the task status
     const updatedTask = await db.task.update({
       where: { id: params.taskId },
       data: { status },

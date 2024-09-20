@@ -1,4 +1,3 @@
-// app/api/consumer/projects/[projectId]/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
@@ -14,7 +13,6 @@ export const GET = async (
   }
 
   try {
-    // Fetch project by ID
     const project = await db.project.findUnique({
       where: { id: params.projectId },
       select: {

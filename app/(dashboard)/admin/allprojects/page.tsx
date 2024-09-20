@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 77c2dbf2a98380968d1b5a79ee00c0538555536b
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -5,6 +9,10 @@ import Link from 'next/link';
 import CreateNewProjectForm from '@/components/dasboards/admin/createNewProjectForm';
 import { FiEdit } from "react-icons/fi";
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 77c2dbf2a98380968d1b5a79ee00c0538555536b
 interface Project {
   id: string;
   name: string;

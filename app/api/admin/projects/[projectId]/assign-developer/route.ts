@@ -14,7 +14,6 @@ export const POST = async (
   }
 
   try {
-    // Ensure the user being assigned is a developer
     const developer = await db.user.findUnique({
       where: { id: developerId },
       select: { roles: true },
@@ -27,7 +26,6 @@ export const POST = async (
       );
     }
 
-    // Create an entry in the DeveloperProject join table to link the developer and project
     await db.developerProject.create({
       data: {
         userId: developerId,

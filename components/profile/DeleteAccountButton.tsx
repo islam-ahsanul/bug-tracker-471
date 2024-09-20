@@ -17,6 +17,7 @@ const DeleteAccountButton = () => {
   const closeDialog = () => {
     setIsOpen(false);
   };
+   // console.log(session);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

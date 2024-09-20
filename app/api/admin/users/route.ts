@@ -1,7 +1,7 @@
-// app/api/admin/users/route.ts
+
 import { NextResponse } from 'next/server';
-import { db } from '@/utils/db'; // Assuming you have a utility file to connect to your database
-import { auth } from '@/utils/auth'; // Assuming you have an authentication utility
+import { db } from '@/utils/db'; 
+import { auth } from '@/utils/auth'; 
 
 export const GET = async () => {
   const session = await auth();

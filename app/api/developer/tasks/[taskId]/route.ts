@@ -1,4 +1,3 @@
-// app/api/developer/tasks/[taskId]/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
@@ -14,7 +13,6 @@ export const GET = async (
   }
 
   try {
-    // Fetch task details by ID
     const task = await db.task.findUnique({
       where: { id: params.taskId },
       select: {

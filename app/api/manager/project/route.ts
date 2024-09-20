@@ -1,4 +1,3 @@
-// app/api/manager/project/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
@@ -11,7 +10,6 @@ export const GET = async () => {
   }
 
   try {
-    // Fetch the project assigned to the manager
     const project = await db.project.findFirst({
       where: {
         managerId: session.user.id,

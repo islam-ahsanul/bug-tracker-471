@@ -11,7 +11,6 @@ export const POST = async (request: Request) => {
   }
 
   try {
-    // Ensure the project exists before posting an issue
     const project = await db.project.findUnique({
       where: { id: projectId },
     });
@@ -23,14 +22,13 @@ export const POST = async (request: Request) => {
       );
     }
 
-    // Create the issue and link it to the project and consumer
     const issue = await db.issue.create({
       data: {
         title,
         description,
         projectId,
-        postedById: session.user.id, // The consumer who posted the issue
-        status: 'PENDING', // Default status
+        postedById: session.user.id,
+        status: 'PENDING',
       },
     });
 

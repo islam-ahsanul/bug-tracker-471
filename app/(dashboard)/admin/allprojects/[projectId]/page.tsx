@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 
-
 interface Project {
   id: string;
   name: string;
@@ -20,14 +19,13 @@ interface User {
 
 export default function ProjectDetails() {
   const [project, setProject] = useState<Project | null>(null);
-  const [users, setUsers] = useState<User[]>([]); 
-  const [developers, setDevelopers] = useState<User[]>([]); 
-  const [selectedDeveloper, setSelectedDeveloper] = useState<string>(''); 
+  const [users, setUsers] = useState<User[]>([]);
+  const [developers, setDevelopers] = useState<User[]>([]);
+  const [selectedDeveloper, setSelectedDeveloper] = useState<string>('');
   const [selectedManager, setSelectedManager] = useState<string | null>(null);
   const params = useParams();
   const { projectId } = params;
 
-  
   useEffect(() => {
     if (!projectId) return;
 
@@ -49,17 +47,21 @@ export default function ProjectDetails() {
     fetchProjectAndUsers();
   }, [projectId]);
 
-
   const handleAssignDeveloper = async () => {
     if (!selectedDeveloper) return;
     try {
-      const res = await fetch(`/api/admin/projects/${projectId}/assign-developer`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ developerId: selectedDeveloper }),
-      });
+      const res = await fetch(
+        `/api/admin/projects/${projectId}/assign-developer`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ developerId: selectedDeveloper }),
+        }
+      );
       if (res.ok) {
-        const newDeveloper = users.find(user => user.id === selectedDeveloper);
+        const newDeveloper = users.find(
+          (user) => user.id === selectedDeveloper
+        );
         if (newDeveloper) {
           setDevelopers([...developers, newDeveloper]);
           setSelectedDeveloper('');
@@ -70,17 +72,19 @@ export default function ProjectDetails() {
     }
   };
 
-
   const handleAssignManager = async () => {
     if (!selectedManager) return;
     try {
-      const res = await fetch(`/api/admin/projects/${projectId}/assign-manager`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ managerId: selectedManager }),
-      });
+      const res = await fetch(
+        `/api/admin/projects/${projectId}/assign-manager`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ managerId: selectedManager }),
+        }
+      );
       if (res.ok) {
-        const newManager = users.find(user => user.id === selectedManager);
+        const newManager = users.find((user) => user.id === selectedManager);
         if (newManager && project) {
           setProject({ ...project, manager: newManager });
           setSelectedManager(null);
@@ -91,12 +95,14 @@ export default function ProjectDetails() {
     }
   };
 
-
   const handleRemoveManager = async () => {
     try {
-      const res = await fetch(`/api/admin/projects/${projectId}/remove-manager`, {
-        method: 'DELETE',
-      });
+      const res = await fetch(
+        `/api/admin/projects/${projectId}/remove-manager`,
+        {
+          method: 'DELETE',
+        }
+      );
       if (res.ok && project) {
         setProject({ ...project, manager: null });
       }
@@ -105,16 +111,18 @@ export default function ProjectDetails() {
     }
   };
 
-
   const handleRemoveDeveloper = async (developerId: string) => {
     try {
-      const res = await fetch(`/api/admin/projects/${projectId}/remove-developer`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ developerId }),
-      });
+      const res = await fetch(
+        `/api/admin/projects/${projectId}/remove-developer`,
+        {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ developerId }),
+        }
+      );
       if (res.ok) {
-        setDevelopers(developers.filter(dev => dev.id !== developerId));
+        setDevelopers(developers.filter((dev) => dev.id !== developerId));
       }
     } catch (err) {
       console.error('Error removing developer', err);
@@ -176,7 +184,10 @@ export default function ProjectDetails() {
             {developers.length > 0 ? (
               <ul className="space-y-2">
                 {developers.map((dev) => (
-                  <li key={dev.id} className="flex items-center justify-between bg-gray-100 p-3 rounded">
+                  <li
+                    key={dev.id}
+                    className="flex items-center justify-between bg-gray-100 p-3 rounded"
+                  >
                     <div>
                       <p className="font-medium">{dev.name}</p>
                       <p className="text-gray-500">{dev.email}</p>
