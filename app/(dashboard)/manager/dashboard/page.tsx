@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-
 interface Issue {
   id: string;
   title: string;
@@ -22,22 +21,19 @@ interface Project {
 }
 
 export default function ManagerDashboard() {
-  const [project, setProject] = useState<Project | null>(null); 
+  const [project, setProject] = useState<Project | null>(null);
   const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  
   useEffect(() => {
     const fetchManagerProject = async () => {
       setLoading(true);
       try {
-        
         const projectRes = await fetch('/api/manager/project');
         const { project } = await projectRes.json();
         setProject(project);
 
-       
         const issuesRes = await fetch(`/api/manager/issues`);
         const { issues } = await issuesRes.json();
         setIssues(issues);
@@ -52,9 +48,11 @@ export default function ManagerDashboard() {
   }, []);
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">
-      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
-    </div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
   return (
@@ -62,25 +60,40 @@ export default function ManagerDashboard() {
       {project ? (
         <div>
           <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
-            <h1 className="text-3xl font-bold mb-4 text-blue-600">Project: {project.name}</h1>
+            <h1 className="text-3xl font-bold mb-4 text-blue-600">
+              Project: {project.name}
+            </h1>
             <p className="text-gray-600">{project.description}</p>
           </div>
 
-          <h2 className="text-2xl font-semibold mb-6 text-gray-800">Issues for This Project</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+            Issues for This Project
+          </h2>
           {issues.length > 0 ? (
             <div className="space-y-6">
               {issues.map((issue) => (
-                <div key={issue.id} className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
-                  <h3 className="text-xl font-semibold mb-2 text-blue-600">{issue.title}</h3>
+                <div
+                  key={issue.id}
+                  className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300"
+                >
+                  <h3 className="text-xl font-semibold mb-2 text-blue-600">
+                    {issue.title}
+                  </h3>
                   <p className="text-gray-600 mb-4">{issue.description}</p>
                   <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
-                    <span>Posted by: {issue.postedBy.name}</span>
-                    <span className={`px-2 py-1 rounded-full ${
-                    issue.status === 'SOLVED' ? 'bg-green-100 text-green-800' :
-                    issue.status === 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
-                      {issue.status}
+                    <span>
+                      Posted by: {issue.postedBy.name} ({issue.postedBy.email})
+                    </span>
+                    <span
+                      className={`px-2 py-1 rounded-full ${
+                        issue.status === 'SOLVED'
+                          ? 'bg-green-100 text-green-800'
+                          : issue.status === 'IN_PROGRESS'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}
+                    >
+                      {issue.status.replace('_', ' ')}
                     </span>
                   </div>
                   <button

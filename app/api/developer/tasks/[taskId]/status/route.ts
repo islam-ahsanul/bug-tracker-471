@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
 import { auth } from '@/utils/auth';
-import { TaskStatus, IssueStatus } from '@prisma/client'; 
+import { IssueStatus } from '@prisma/client';
 
 export const PATCH = async (
   request: Request,
@@ -24,7 +24,7 @@ export const PATCH = async (
       select: {
         id: true,
         issueId: true,
-        status: true,
+        // status: true,
       },
     });
 
@@ -35,7 +35,7 @@ export const PATCH = async (
     await db.task.update({
       where: { id: params.taskId },
       data: {
-        status: status as TaskStatus, 
+        // status: status as TaskStatus,
       },
     });
 

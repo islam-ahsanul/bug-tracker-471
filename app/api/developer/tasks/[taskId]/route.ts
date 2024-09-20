@@ -23,7 +23,7 @@ export const GET = async (
             description: true,
           },
         },
-        status: true,
+        // status: true,
       },
     });
 

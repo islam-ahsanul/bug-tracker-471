@@ -22,7 +22,7 @@ export const GET = async (
       },
       select: {
         id: true,
-        status: true,
+        // status: true,
         createdAt: true,
         updatedAt: true,
         issue: {
