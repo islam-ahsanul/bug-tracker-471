@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
-// Define types for Project and User
+
 interface Project {
   id: string;
   name: string;
@@ -19,16 +19,15 @@ interface User {
 }
 
 export default function ProjectDetails() {
-  const [project, setProject] = useState<Project | null>(null); // State typed as Project or null
-  const [users, setUsers] = useState<User[]>([]); // Users array of type User[]
-  const [developers, setDevelopers] = useState<User[]>([]); // Developers array
-  const [selectedDeveloper, setSelectedDeveloper] = useState<string>(''); // Single developer selection
-  const [selectedManager, setSelectedManager] = useState<string | null>(null); // Single manager selection
-  const router = useRouter();
+  const [project, setProject] = useState<Project | null>(null);
+  const [users, setUsers] = useState<User[]>([]); 
+  const [developers, setDevelopers] = useState<User[]>([]); 
+  const [selectedDeveloper, setSelectedDeveloper] = useState<string>(''); 
+  const [selectedManager, setSelectedManager] = useState<string | null>(null);
   const params = useParams();
   const { projectId } = params;
 
-  // Fetch project details and users on component mount
+  
   useEffect(() => {
     if (!projectId) return;
 
@@ -50,74 +49,72 @@ export default function ProjectDetails() {
     fetchProjectAndUsers();
   }, [projectId]);
 
-  // Handle assigning a developer
+
   const handleAssignDeveloper = async () => {
+    if (!selectedDeveloper) return;
     try {
-      const res = await fetch(
-        `/api/admin/projects/${projectId}/assign-developer`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ developerId: selectedDeveloper }), // Send single developer ID
-        }
-      );
+      const res = await fetch(`/api/admin/projects/${projectId}/assign-developer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ developerId: selectedDeveloper }),
+      });
       if (res.ok) {
-        router.refresh(); // Refresh the page to reflect the newly assigned developer
+        const newDeveloper = users.find(user => user.id === selectedDeveloper);
+        if (newDeveloper) {
+          setDevelopers([...developers, newDeveloper]);
+          setSelectedDeveloper('');
+        }
       }
     } catch (err) {
       console.error('Error assigning developer', err);
     }
   };
 
-  // Handle assigning a manager
+
   const handleAssignManager = async () => {
+    if (!selectedManager) return;
     try {
-      const res = await fetch(
-        `/api/admin/projects/${projectId}/assign-manager`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ managerId: selectedManager }),
-        }
-      );
+      const res = await fetch(`/api/admin/projects/${projectId}/assign-manager`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ managerId: selectedManager }),
+      });
       if (res.ok) {
-        router.refresh(); // Refresh the page to reflect the newly assigned manager
+        const newManager = users.find(user => user.id === selectedManager);
+        if (newManager && project) {
+          setProject({ ...project, manager: newManager });
+          setSelectedManager(null);
+        }
       }
     } catch (err) {
       console.error('Error assigning manager', err);
     }
   };
 
-  // Handle removing a manager
+
   const handleRemoveManager = async () => {
     try {
-      const res = await fetch(
-        `/api/admin/projects/${projectId}/remove-manager`,
-        {
-          method: 'DELETE',
-        }
-      );
-      if (res.ok) {
-        router.refresh(); // Refresh the page after removing manager
+      const res = await fetch(`/api/admin/projects/${projectId}/remove-manager`, {
+        method: 'DELETE',
+      });
+      if (res.ok && project) {
+        setProject({ ...project, manager: null });
       }
     } catch (err) {
       console.error('Error removing manager', err);
     }
   };
 
-  // Handle removing a developer
+
   const handleRemoveDeveloper = async (developerId: string) => {
     try {
-      const res = await fetch(
-        `/api/admin/projects/${projectId}/remove-developer`,
-        {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ developerId }),
-        }
-      );
+      const res = await fetch(`/api/admin/projects/${projectId}/remove-developer`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ developerId }),
+      });
       if (res.ok) {
-        router.refresh(); // Refresh the page after removing developer
+        setDevelopers(developers.filter(dev => dev.id !== developerId));
       }
     } catch (err) {
       console.error('Error removing developer', err);
@@ -125,98 +122,110 @@ export default function ProjectDetails() {
   };
 
   return (
-    <div>
+    <div className="max-w-4xl mx-auto p-6">
       {project ? (
         <div>
-          <h1 className="text-2xl font-bold mb-4">Project: {project.name}</h1>
-          <p>{project.description}</p>
+          <h1 className="text-3xl font-bold mb-6">{project.name}</h1>
+          <p className="text-gray-600 mb-8">{project.description}</p>
 
-          <h2 className="text-xl mt-6 mb-2">Current Manager</h2>
-          {project.manager ? (
-            <div>
-              <p>
-                {project.manager.name} ({project.manager.email})
-              </p>
-              <button
-                onClick={handleRemoveManager}
-                className="bg-red-500 text-white py-2 px-4 mt-2"
+          <div className="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h2 className="text-2xl font-semibold mb-4">Project Manager</h2>
+            {project.manager ? (
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">{project.manager.name}</p>
+                  <p className="text-gray-500">{project.manager.email}</p>
+                </div>
+                <button
+                  onClick={handleRemoveManager}
+                  className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded transition duration-300"
+                >
+                  Remove Manager
+                </button>
+              </div>
+            ) : (
+              <p className="text-gray-500">No manager assigned</p>
+            )}
+
+            <div className="mt-4">
+              <select
+                value={selectedManager || ''}
+                onChange={(e) => setSelectedManager(e.target.value)}
+                className="border rounded p-2 mr-2"
               >
-                Remove Manager
+                <option value="">Select Manager</option>
+                {users
+                  .filter((user) => user.roles === 'MANAGER')
+                  .map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.name} ({user.email})
+                    </option>
+                  ))}
+              </select>
+              <button
+                onClick={handleAssignManager}
+                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-300"
+              >
+                Assign Manager
               </button>
             </div>
-          ) : (
-            <p>No manager assigned</p>
-          )}
+          </div>
 
-          <h2 className="text-xl mt-6 mb-2">Assign Manager</h2>
-          <select
-            value={selectedManager || ''}
-            onChange={(e) => setSelectedManager(e.target.value)}
-            className="border p-2 mb-4"
-          >
-            <option value="">Select Manager</option>
-            {users
-              .filter((user) => user.roles === 'MANAGER')
-              .map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name} ({user.email})
-                </option>
-              ))}
-          </select>
-          <button
-            onClick={handleAssignManager}
-            className="bg-blue-500 text-white py-2 px-4"
-          >
-            Assign Manager
-          </button>
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-semibold mb-4">Project Developers</h2>
+            {developers.length > 0 ? (
+              <ul className="space-y-2">
+                {developers.map((dev) => (
+                  <li key={dev.id} className="flex items-center justify-between bg-gray-100 p-3 rounded">
+                    <div>
+                      <p className="font-medium">{dev.name}</p>
+                      <p className="text-gray-500">{dev.email}</p>
+                    </div>
+                    <button
+                      onClick={() => handleRemoveDeveloper(dev.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded transition duration-300"
+                    >
+                      Remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500">No developers assigned</p>
+            )}
 
-          <h2 className="text-xl mt-6 mb-2">Current Developers</h2>
-          {developers.length > 0 ? (
-            <ul>
-              {developers.map((dev) => (
-                <li key={dev.id}>
-                  {dev.name} ({dev.email}){' '}
-                  <button
-                    onClick={() => handleRemoveDeveloper(dev.id)}
-                    className="bg-red-500 text-white py-1 px-2 ml-2"
-                  >
-                    Remove
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No developers assigned</p>
-          )}
-
-          <h2 className="text-xl mt-6 mb-2">Assign Developer</h2>
-          <select
-            value={selectedDeveloper}
-            onChange={(e) => setSelectedDeveloper(e.target.value)}
-            className="border p-2 mb-4"
-          >
-            <option value="">Select Developer</option>
-            {users
-              .filter(
-                (user) =>
-                  user.roles === 'DEVELOPER' &&
-                  !developers.some((dev) => dev.id === user.id)
-              ) // Exclude already assigned developers
-              .map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name} ({user.email})
-                </option>
-              ))}
-          </select>
-          <button
-            onClick={handleAssignDeveloper}
-            className="bg-green-500 text-white py-2 px-4"
-          >
-            Assign Developer
-          </button>
+            <div className="mt-4">
+              <select
+                value={selectedDeveloper}
+                onChange={(e) => setSelectedDeveloper(e.target.value)}
+                className="border rounded p-2 mr-2"
+              >
+                <option value="">Select Developer</option>
+                {users
+                  .filter(
+                    (user) =>
+                      user.roles === 'DEVELOPER' &&
+                      !developers.some((dev) => dev.id === user.id)
+                  )
+                  .map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.name} ({user.email})
+                    </option>
+                  ))}
+              </select>
+              <button
+                onClick={handleAssignDeveloper}
+                className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded transition duration-300"
+              >
+                Assign Developer
+              </button>
+            </div>
+          </div>
         </div>
       ) : (
-        <p>Loading project...</p>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
       )}
     </div>
   );
