@@ -15,6 +15,7 @@ interface Issue {
   title: string;
   description: string;
   status: string;
+  projectId: string;
 }
 
 export default function IssueDetail() {
@@ -35,12 +36,21 @@ export default function IssueDetail() {
       setLoading(true);
       setError(null); // Clear any previous error
       try {
+        // Fetch the issue details to get the projectId
         const issueRes = await fetch(`/api/manager/issues/${issueId}`);
         if (!issueRes.ok) throw new Error('Failed to fetch issue details');
         const { issue } = await issueRes.json();
         setIssue(issue);
 
-        const developersRes = await fetch(`/api/manager/developers`);
+        // Ensure projectId is present before fetching developers
+        if (!issue.projectId) {
+          throw new Error('Project ID is missing');
+        }
+        console.log(issue);
+        // Fetch developers working under the same project
+        const developersRes = await fetch(
+          `/api/manager/developers?projectId=${issue.projectId}`
+        );
         if (!developersRes.ok) throw new Error('Failed to fetch developers');
         const { developers } = await developersRes.json();
         setDevelopers(developers);
@@ -78,16 +88,23 @@ export default function IssueDetail() {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">
-      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
-    </div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-      <strong className="font-bold">Error!</strong>
-      <span className="block sm:inline"> {error}</span>
-    </div>;
+    return (
+      <div
+        className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+        role="alert"
+      >
+        <strong className="font-bold">Error!</strong>
+        <span className="block sm:inline"> {error}</span>
+      </div>
+    );
   }
 
   return (
