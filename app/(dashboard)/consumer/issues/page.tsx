@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Issue {
   id: string;
@@ -36,32 +37,52 @@ export default function ConsumerIssues() {
   }, []);
 
   if (loading) {
-    return <p>Loading your posted issues...</p>;
+    return <p className="text-center py-4">Loading your issues...</p>;
   }
 
   if (error) {
-    return <p className="text-red-500">{error}</p>;
+    return (
+      <Card className="bg-red-50 border-red-200">
+        <CardContent className="pt-6">
+          <p className="text-red-600">{error}</p>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Your Posted Issues</h1>
+    <div className="space-y-6">
+      <h1 className="text-3xl font-bold">Your Posted Issues</h1>
 
       {issues && issues.length > 0 ? (
-        <ul className="space-y-4">
+        <div className="space-y-4">
           {issues.map((issue) => (
-            <li key={issue.id} className="border p-4">
-              <h2 className="text-xl font-semibold mb-2">{issue.title}</h2>
-              <p className="mb-2">{issue.description}</p>
-              <p className="text-sm text-gray-500">
-                Project: {issue.projectName}
-              </p>
-              <p className="text-sm text-gray-500">Status: {issue.status}</p>
-            </li>
+            <Card key={issue.id} className="hover:shadow-md transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle>{issue.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">{issue.description}</p>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-blue-600 font-medium">Project: {issue.projectName}</span>
+                  <span className={`px-2 py-1 rounded-full ${
+                    issue.status === 'SOLVED' ? 'bg-green-100 text-green-800' :
+                    issue.status === 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}>
+                    {issue.status}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
           ))}
-        </ul>
+        </div>
       ) : (
-        <p>No issues posted yet.</p>
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-center text-gray-600">No issues posted yet.</p>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
