@@ -78,48 +78,60 @@ export default function IssueDetail() {
   };
 
   if (loading) {
-    return <p>Loading issue details...</p>;
+    return <div className="flex justify-center items-center h-screen">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+    </div>;
   }
 
   if (error) {
-    return <p className="text-red-500">{error}</p>; // Display error message if there was an issue
+    return <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <strong className="font-bold">Error!</strong>
+      <span className="block sm:inline"> {error}</span>
+    </div>;
   }
 
   return (
-    <div>
+    <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       {issue ? (
         <div>
-          <h1 className="text-2xl font-bold mb-4">{issue.title}</h1>
-          <p className="mb-4">{issue.description}</p>
-
-          <h2 className="text-xl mb-2">
-            Assign Developer to Resolve This Issue
-          </h2>
-
-          <select
-            value={selectedDeveloper}
-            onChange={(e) => setSelectedDeveloper(e.target.value)}
-            className="border p-2 mb-4 w-full"
-            disabled={assigning} // Disable during assignment
-          >
-            <option value="">Select Developer</option>
-            {developers.map((dev) => (
-              <option key={dev.id} value={dev.id}>
-                {dev.name} ({dev.email})
-              </option>
-            ))}
-          </select>
-
-          <button
-            onClick={handleAssignTask}
-            className="bg-blue-500 text-white py-2 px-4"
-            disabled={!selectedDeveloper || assigning} // Disable if no developer is selected or while assigning
-          >
-            {assigning ? 'Assigning...' : 'Assign Task'}
-          </button>
+          <h1 className="text-4xl font-bold mb-4 text-blue-600 border-b-2 border-blue-200 pb-2">
+            {issue.title}
+          </h1>
+          <p className="mb-6 text-gray-700 text-lg leading-relaxed bg-gray-100 p-4 rounded-lg font-bold">
+            {issue.description}
+          </p>
+          <div className="mb-6">
+            <h2 className="text-sm font-semibold mb-4 text-gray-700">
+              Assign Developer to Resolve This Issue
+            </h2>
+            <select
+              value={selectedDeveloper}
+              onChange={(e) => setSelectedDeveloper(e.target.value)}
+              className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none"
+              disabled={assigning}
+            >
+              <option value="">Select Developer</option>
+              {developers.map((dev) => (
+                <option key={dev.id} value={dev.id}>
+                  {dev.name} ({dev.email})
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={handleAssignTask}
+              className={`w-full py-2 px-4 rounded-md text-white font-semibold transition duration-300 ${
+                !selectedDeveloper || assigning
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-500 hover:bg-blue-600'
+              }`}
+              disabled={!selectedDeveloper || assigning}
+            >
+              {assigning ? 'Assigning...' : 'Assign Task'}
+            </button>
+          </div>
         </div>
       ) : (
-        <p>Issue not found</p>
+        <p className="text-center text-gray-700">Issue not found</p>
       )}
     </div>
   );
